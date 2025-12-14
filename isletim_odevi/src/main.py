@@ -1,22 +1,19 @@
 import os
 import sys
+import threading
 
 from yardimci import dosyadan_cek
 
 from fcfs import fcfs_rapor
 from sjf_kesmesiz import sjf_kesmesiz_rapor
-from oncelik_kesmesiz import oncelik_kesmesiz_rapor
 from sjf_kesmeli import sjf_kesmeli_rapor
+from oncelik_kesmesiz import oncelik_kesmesiz_rapor
+from oncelik_kesmeli import oncelik_kesmeli_rapor
+from round_robin import round_robin_rapor
 
-try:
-    from oncelik_kesmeli import oncelik_kesmeli_rapor
-except Exception:
-    oncelik_kesmeli_rapor = None
 
-try:
-    from round_robin import round_robin_rapor
-except Exception:
-    round_robin_rapor = None
+def kopya(liste):
+    return [dict(x) for x in liste]
 
 
 def calistir(case_yolu, etiket):
@@ -24,16 +21,23 @@ def calistir(case_yolu, etiket):
 
     os.makedirs("cikti", exist_ok=True)
 
-    fcfs_rapor(surecler, os.path.join("cikti", f"fcfs_{etiket}.txt"))
-    sjf_kesmesiz_rapor(surecler, os.path.join("cikti", f"sjf_kesmesiz_{etiket}.txt"))
-    sjf_kesmeli_rapor(surecler, os.path.join("cikti", f"sjf_kesmeli_{etiket}.txt"))
-    oncelik_kesmesiz_rapor(surecler, os.path.join("cikti", f"oncelik_kesmesiz_{etiket}.txt"))
+    isler = [
+        (fcfs_rapor, kopya(surecler), os.path.join("cikti", f"fcfs_{etiket}.txt")),
+        (sjf_kesmesiz_rapor, kopya(surecler), os.path.join("cikti", f"sjf_kesmesiz_{etiket}.txt")),
+        (sjf_kesmeli_rapor, kopya(surecler), os.path.join("cikti", f"sjf_kesmeli_{etiket}.txt")),
+        (oncelik_kesmesiz_rapor, kopya(surecler), os.path.join("cikti", f"oncelik_kesmesiz_{etiket}.txt")),
+        (oncelik_kesmeli_rapor, kopya(surecler), os.path.join("cikti", f"oncelik_kesmeli_{etiket}.txt")),
+        (lambda a, b: round_robin_rapor(a, b, q=4), kopya(surecler), os.path.join("cikti", f"round_robin_{etiket}.txt")),
+    ]
 
-    if oncelik_kesmeli_rapor:
-        oncelik_kesmeli_rapor(surecler, os.path.join("cikti", f"oncelik_kesmeli_{etiket}.txt"))
+    th = []
+    for fn, s, yol in isler:
+        t = threading.Thread(target=fn, args=(s, yol))
+        t.start()
+        th.append(t)
 
-    if round_robin_rapor:
-        round_robin_rapor(surecler, os.path.join("cikti", f"round_robin_{etiket}.txt"))
+    for t in th:
+        t.join()
 
 
 def main():
