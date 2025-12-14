@@ -1,0 +1,1 @@
+# Kesmeli SJF algoritması

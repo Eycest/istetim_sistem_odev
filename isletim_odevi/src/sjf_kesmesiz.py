@@ -1,0 +1,1 @@
+# Kesmesiz SJF algoritması
