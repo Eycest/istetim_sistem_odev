@@ -1,4 +1,4 @@
-# İşlemci Zamanlama Ödev 1
+# EBLM341 - Ödev (İşlemci Zamanlama)
 
 EBLM341 - Ödev
 
