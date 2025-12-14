@@ -13,3 +13,5 @@ Programı çalıştırmak için,
 python src/main.py
 
 Çıktılar cikti klasörüne otomatik olarak yazılcak
+
+rapor_web.py ile web ön izlemesi hazırlanır, rapor klasörüne düşer
