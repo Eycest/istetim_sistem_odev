@@ -1,3 +1,5 @@
 # İşlemci Zamanlama Ödev 1
 
-EBLM341 İşletim Sistemleri dersi için hazırlanmıştır.
+EBLM341 - Ödev
+
+Mehmet Turak TEKER - 20222013234
